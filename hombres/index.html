@@ -482,6 +482,48 @@ posts.forEach(post => {
 
   feed.appendChild(article);
 });
+  let feedScrollMessageSent = false;
+
+function getFeedScrollPosition(target) {
+  if (
+    target === document ||
+    target === document.documentElement ||
+    target === document.body
+  ) {
+    return (
+      window.scrollY ||
+      document.documentElement.scrollTop ||
+      document.body.scrollTop ||
+      0
+    );
+  }
+
+  return typeof target.scrollTop === 'number'
+    ? target.scrollTop
+    : 0;
+}
+
+document.addEventListener(
+  'scroll',
+  function (event) {
+    if (feedScrollMessageSent) return;
+
+    const position = getFeedScrollPosition(event.target);
+
+    if (Math.abs(position) >= 150) {
+      feedScrollMessageSent = true;
+
+      window.parent.postMessage(
+        {
+          type: 'FEED_SCROLL_DETECTED',
+          scrollY: Math.round(position)
+        },
+        'https://microintervencion-redes-sociales.vercel.app'
+      );
+    }
+  },
+  true
+);
 </script>
 
 </body>
