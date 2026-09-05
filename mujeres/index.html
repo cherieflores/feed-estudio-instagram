@@ -545,7 +545,7 @@ document.addEventListener(
 
     const position = getFeedScrollPosition(event.target);
 
-    if (Math.abs(position) >= 150) {
+    if (Math.abs(position) >= 600) {
       feedScrollMessageSent = true;
 
       window.parent.postMessage(
